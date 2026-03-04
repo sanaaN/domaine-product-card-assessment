@@ -6,6 +6,12 @@ module.exports = {
     './snippets/*.liquid',
     './assets/*.js',
   ],
-  theme: { extend: {} },
+  theme: {
+    extend: {
+      fontFamily: {
+        brand: ['Roboto', 'system-ui', '-apple-system', 'Segoe UI', 'Arial', 'sans-serif'],
+      },
+    },
+  },
   plugins: [],
 };

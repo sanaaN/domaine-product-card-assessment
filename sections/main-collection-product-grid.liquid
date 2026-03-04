@@ -165,7 +165,7 @@
                     style="--animation-order: {{ forloop.index }};"
                   {% endif %}
                 >
-                  {% render 'card-product',
+                  {% render 'card-product-domaine',
                     card_product: product,
                     media_aspect_ratio: section.settings.image_ratio,
                     image_shape: section.settings.image_shape,
@@ -233,7 +233,7 @@
           "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
         }
       ]
-    },    
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",
