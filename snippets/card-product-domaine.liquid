@@ -26,9 +26,9 @@
   {%- comment -%} Compute initial hover image url (variant metafield fallback) {%- endcomment -%}
   {%- assign hover_image_url = '' -%}
   {%- if variant.metafields.custom.secondary_image != blank -%}
-    {%- assign hover_image_url = variant.metafields.custom.secondary_image | file_url -%}
+    {%- assign hover_image_url = variant.metafields.custom.secondary_image | image_url: width: 600 -%}
   {%- elsif product.media.size > 1 -%}
-    {%- assign hover_image_url = product.media[1] | image_url: width: 900 -%}
+    {%- assign hover_image_url = product.media[1] | image_url: width: 600 -%}
   {%- endif -%}
 
   <div class="w-full max-w-[320px]" data-product-card>
@@ -46,11 +46,11 @@
             {%- if featured_media -%}
               <img
                 data-primary-image
-                src="{{ featured_media | image_url: width: 600 }}"
+                src="{{ featured_media.preview_image| image_url: width: 600 }}"
                 alt="{{ product.title | escape }}"
                 loading="lazy"
                 width="{{ featured_media.preview_image.width }}"
-                height="{{ featured_media.preview_image.height }}
+                height="{{ featured_media.preview_image.height }}"
                 class="absolute inset-0 h-full w-full object-contain transition-opacity duration-200 group-hover:opacity-0"
               >
 
@@ -59,6 +59,8 @@
                 src="{{ hover_image_url }}"
                 alt="{{ product.title | escape }}"
                 loading="lazy"
+                width="{{ featured_media.preview_image.width }}"
+                height="{{ featured_media.preview_image.height }}"
                 class="absolute inset-0 h-full w-full object-contain opacity-0 transition-opacity duration-200 group-hover:opacity-100 {%- if hover_image_url == blank -%} hidden{%- endif -%}"
               >
             {%- else -%}
@@ -105,20 +107,23 @@
             {%- comment -%} Selected state for initial variant {%- endcomment -%}
             <button
               type="button"
-              class="h-[20px] w-[20px] rounded-full ring-offset-2 focus:outline-none focus:ring-2 focus:ring-gray-400
-                {%- if v.id == variant.id -%} ring-2 ring-gray-900{%- endif -%}"
+              class="
+                h-[22px] w-[22px] rounded-full border p-[2px]
+                hover:border-[#0A4874] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A4874]
+                {% if v.id == variant.id %}border-[#0A4874]{% else %}border-transparent{% endif %}
+              "
               title="{{ color_value | escape }}"
               aria-label="Select {{ color_value | escape }}"
               aria-pressed="{%- if v.id == variant.id -%}true{%- else -%}false{%- endif -%}"
 
-              data-swatch  
+              data-swatch
               data-variant-id="{{ v.id }}"
               data-color="{{ color_value | escape }}"
 
               data-image="{{ v_img_url }}"
               data-hover-image="{{ v_hover_url }}"
               data-price="{{ v.price | money | escape }}"
-              data-compare-at="{% if v.compare_at_price %}{{ v.compare_at_price | money | escape }}{% endif %}" 
+              data-compare-at="{% if v.compare_at_price %}{{ v.compare_at_price | money | escape }}{% endif %}"
               data-on-sale="{% if v_on_sale %}true{% else %}false{% endif %}"
             >
               <span
@@ -140,15 +145,15 @@
 
         <div class="flex items-baseline gap-3">
           <span
-            data-compare-at
+            data-compare-at-display
             class="text-[14px] text-[#111111] line-through {%- unless on_sale -%} hidden{%- endunless -%}"
           >
             {{ variant.compare_at_price | money }}
           </span>
 
           <span
-            data-price
-            class="text-[14px] {%- if on_sale -%} text-[#FF0000]{%- else -%} text-[#111111]{%- endif -%} font-normal"
+            data-price-display
+            class="text-[14px] font-normal{% if on_sale %} text-[#FF0000]{% else %} text-[#111111]{% endif %}"
           >
             {{ variant.price | money }}
           </span>
